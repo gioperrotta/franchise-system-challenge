@@ -1,0 +1,12 @@
+version: "3.7"
+
+services:
+  api-solid-pg:
+    container_name: masterclass-nest-pg
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=franchise
