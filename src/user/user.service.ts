@@ -25,14 +25,18 @@ export class UserService {
     };
   }
 
-  findByEmail(email: string) {
-    return this.prisma.user.findUnique({
+  async getUserByEmail(email: string): Promise<User> | null {
+    return await this.prisma.user.findUnique({
       where: { email },
     });
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findById(id: string): Promise<User> {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+    return {
+      ...user,
+      password: undefined,
+    };
   }
 
   findOne(id: number) {

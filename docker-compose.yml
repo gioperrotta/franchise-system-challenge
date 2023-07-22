@@ -1,8 +1,8 @@
 version: "3.7"
 
 services:
-  api-solid-pg:
-    container_name: masterclass-nest-pg
+  franchise:
+    container_name: franchise
     image: postgres
     ports:
       - 5432:5432

@@ -11,7 +11,6 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @IsPublic()
   login(@Body() data: LoginDto) {
-    return data;
-    // return this.authService.login();
+    return this.authService.login(data);
   }
 }
