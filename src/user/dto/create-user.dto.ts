@@ -16,4 +16,7 @@ export class CreateUserDto extends User {
 
   @MinLength(2, { message: MessagesHelper.REGISTER_NAME_NOT_VALID })
   name: string;
+
+  @MinLength(10, { message: MessagesHelper.REGISTER_ROLE_NOT_VALID })
+  role_id: string;
 }

@@ -12,9 +12,10 @@ export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateUserDto): Promise<User> {
+    const passwordHashed = await hash(data.password, 6);
     const newUser = {
       ...data,
-      password: await hash(data.password, 6),
+      password: passwordHashed,
     };
 
     const createdUser = await this.prisma.user.create({ data: newUser });

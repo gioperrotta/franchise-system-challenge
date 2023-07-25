@@ -11,4 +11,6 @@ export const MessagesHelper = {
 
   REGISTER_EMAIL_NOT_FOUND: 'email informado não é válido',
   REGISTER_PASSWORD_NOT_FOUND: 'Senha informada não é válida',
+
+  REGISTER_ROLE_NOT_VALID: 'Nome informado não é válido',
 };

@@ -3,7 +3,6 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { IsPublic } from 'src/auth/decorators/isPublic.decorator';
-import { AuthRequest } from 'src/auth/types/AuthRequest';
 import { CurrentUser } from 'src/auth/decorators/currentUser.decorator';
 import { UserFromJwt } from 'src/auth/types/UserFromJwt';
 
@@ -13,8 +12,8 @@ export class UserController {
 
   @Post()
   @IsPublic()
-  create(@Body() data: CreateUserDto) {
-    return this.userService.create(data);
+  create(@Body() createUserDto: CreateUserDto) {
+    return this.userService.create(createUserDto);
   }
 
   @Get()
