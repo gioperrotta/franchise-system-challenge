@@ -18,6 +18,7 @@ export class UserService {
     if (existsUser) {
       throw new BadRequestException(MessagesHelper.USER_CREATE_EXISTS_EMAIL);
     }
+
     const passwordHashed = await hash(createUserDto.password, 6);
     const newUser = {
       ...createUserDto,

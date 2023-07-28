@@ -1,9 +1,4 @@
-interface RoleType {
-  id?: string;
-  name: string;
-  deescription: string;
-  level: number;
-}
+import { RoleType } from 'src/role/types/roleType';
 export interface UserType {
   id?: string;
   email: string;

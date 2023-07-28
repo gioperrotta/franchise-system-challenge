@@ -6,6 +6,8 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { IS_PUBLIC_KEY } from '../decorators/isPublic.decorator';
+
 import jwt_decode from 'jwt-decode';
 import { UserPayload } from '../types/UserPayload';
 import { UserType } from 'src/user/types/user.types';
@@ -24,6 +26,14 @@ export class CreateUserGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (isPublic) {
+      return true;
+    }
+
     const token = context.getArgs()[0].headers.authorization.split(' ')[1];
     const payload: UserPayload = jwt_decode(token);
     const userRequest = (await this.usersService.findById(
@@ -33,6 +43,7 @@ export class CreateUserGuard implements CanActivate {
     if (!userRequest) {
       throw new UnauthorizedException(MessagesHelper.AUTH_UNAUTHORIZED);
     }
+
     const roles = this.reflector.get<string[]>('roles', context.getHandler());
     const userRoleMatch = roles.filter(
       (role) => role === userRequest.role.name,
@@ -50,6 +61,9 @@ export class CreateUserGuard implements CanActivate {
       throw new BadRequestException(MessagesHelper.AUTH_ID_ROLE_NOT_VALID);
     }
     const roleNewUser = await this.roleServive.findById(body.role_id);
+    if (!roleNewUser) {
+      throw new BadRequestException(MessagesHelper.AUTH_ID_ROLE_NOT_VALID);
+    }
 
     if (userRequest.role.level >= roleNewUser.level) {
       throw new UnauthorizedException(MessagesHelper.AUTH_UNAUTHORIZED);

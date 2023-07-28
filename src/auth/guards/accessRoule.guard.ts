@@ -5,6 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { IS_PUBLIC_KEY } from '../decorators/isPublic.decorator';
 import jwt_decode from 'jwt-decode';
 import { UserPayload } from '../types/UserPayload';
 
@@ -22,6 +23,13 @@ export class AccessRolesGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (isPublic) {
+      return true;
+    }
     const token = context.getArgs()[0].headers.authorization.split(' ')[1];
     const payload: UserPayload = jwt_decode(token);
     const userRequest = (await this.usersService.findById(

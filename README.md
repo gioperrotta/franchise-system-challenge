@@ -1,4 +1,4 @@
-npm i @nestjs/passport @nestjs/jwt bcryptjs class-validator class-transformer passport passport-jwt passport-local
+npm i @nestjs/passport @nestjs/jwt bcryptjs class-validator class-transformer passport passport-jwt passport-local jwt-decode
 
 npm i -D @types/passport-jwt @types/passport-local @types/bcryptjs
 
