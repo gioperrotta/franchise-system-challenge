@@ -14,7 +14,7 @@ export class AuthService {
   ) {}
 
   async login(data: LoginDto) {
-    const user = await this.userService.getUserByEmail(data.email);
+    const user = await this.userService.findByEmail(data.email);
     if (!user) {
       throw new BadRequestException(
         MessagesHelper.AUTH_PASSWORD_OR_LOGIN_NOT_FOUND,

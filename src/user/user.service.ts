@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -6,15 +6,21 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { hash } from 'bcryptjs';
 
 import { User } from '@prisma/client';
+import { MessagesHelper } from './helpers/messages.helper';
+import { UserFromJwt } from 'src/auth/types/UserFromJwt';
 
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(data: CreateUserDto): Promise<User> {
-    const passwordHashed = await hash(data.password, 6);
+  async create(user: UserFromJwt, createUserDto: CreateUserDto): Promise<User> {
+    const existsUser = await this.findByEmail(createUserDto.email);
+    if (existsUser) {
+      throw new BadRequestException(MessagesHelper.USER_CREATE_EXISTS_EMAIL);
+    }
+    const passwordHashed = await hash(createUserDto.password, 6);
     const newUser = {
-      ...data,
+      ...createUserDto,
       password: passwordHashed,
     };
 
@@ -26,16 +32,24 @@ export class UserService {
     };
   }
 
-  async getUserByEmail(email: string): Promise<User> | null {
+  async findByEmail(email: string): Promise<User> | null {
     return await this.prisma.user.findUnique({
       where: { email },
     });
   }
 
   async findById(id: string): Promise<User> {
-    const user = await this.prisma.user.findUnique({ where: { id } });
+    const resultUser = await this.prisma.user.findUnique({
+      where: { id },
+      include: { role: true },
+    });
+
+    if (!resultUser) {
+      throw new BadRequestException(MessagesHelper.USER_NOT_FOUND);
+    }
+
     return {
-      ...user,
+      ...resultUser,
       password: undefined,
     };
   }

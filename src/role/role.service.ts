@@ -18,8 +18,12 @@ export class RoleService {
     return createdRole;
   }
 
+  findById(id: string) {
+    return this.prisma.role.findUnique({ where: { id } });
+  }
+
   findAll() {
-    return `This action returns all role`;
+    return this.prisma.role.findMany();
   }
 
   findOne(id: number) {

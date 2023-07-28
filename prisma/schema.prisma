@@ -28,7 +28,7 @@ model Role {
   description String
   level       Int    @default(9)
 
-  User User[]
+  users User[]
 
   @@map("roles")
 }
