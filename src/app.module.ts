@@ -7,9 +7,10 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt.guard';
 import { RoleModule } from './role/role.module';
 import { CepModule } from './cep/cep.module';
+import { FranchiseUnitModule } from './franchise-unit/franchise-unit.module';
 
 @Module({
-  imports: [PrismaModule, UserModule, AuthModule, RoleModule, CepModule],
+  imports: [PrismaModule, UserModule, AuthModule, RoleModule, CepModule, FranchiseUnitModule],
   controllers: [AppController],
   providers: [{ provide: APP_GUARD, useClass: JwtAuthGuard }],
 })

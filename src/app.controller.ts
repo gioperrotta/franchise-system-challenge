@@ -1,6 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { IsPublic } from './auth/decorators/isPublic.decorator';
-import { CepResponse, CepService } from './cep/cep.service';
+import { CepService } from './cep/cep.service';
 
 @Controller()
 export class AppController {
